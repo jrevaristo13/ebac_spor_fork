@@ -1,19 +1,14 @@
+import { useSelector } from 'react-redux'
+import { RootState } from '../../store'
 import * as S from './styles'
 
-import { Produto } from '../../App'
+const Header = () => {
+  // Buscamos o estado global diretamente aqui
+  const itensNoCarrinho = useSelector((state: RootState) => state.carrinho.itens)
+  const favoritos = useSelector((state: RootState) => state.carrinho.favoritos)
 
-import cesta from '../../assets/cesta.png'
-import { paraReal } from '../Produto'
-
-type Props = {
-  itensNoCarrinho: Produto[]
-  favoritos: Produto[]
-}
-
-const Header = ({ itensNoCarrinho, favoritos }: Props) => {
   const valorTotal = itensNoCarrinho.reduce((acc, item) => {
-    acc += item.preco
-    return acc
+    return acc + item.preco
   }, 0)
 
   return (
@@ -21,9 +16,9 @@ const Header = ({ itensNoCarrinho, favoritos }: Props) => {
       <h1>EBAC Sports</h1>
       <div>
         <span>{favoritos.length} favoritos</span>
-        <img src={cesta} />
+        <img src="caminho-da-sua-imagem" />
         <span>
-          {itensNoCarrinho.length} itens, valor total: {paraReal(valorTotal)}
+          {itensNoCarrinho.length} itens, valor total: {valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
         </span>
       </div>
     </S.Header>

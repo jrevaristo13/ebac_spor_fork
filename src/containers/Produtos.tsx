@@ -1,43 +1,35 @@
-import { Produto as ProdutoType } from '../App'
-import Produto from '../components/Produto'
-
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../store'
+import { useGetProdutosQuery } from '../services/api'
+import { adicionar, favoritar } from '../store/reducers/carrinho'
+import ProdutoComponente from '../components/Produto'
 import * as S from './styles'
 
-type Props = {
-  produtos: ProdutoType[]
-  favoritos: ProdutoType[]
-  adicionarAoCarrinho: (produto: ProdutoType) => void
-  favoritar: (produto: ProdutoType) => void
-}
+const Produtos = () => {
+  // 1. Busca os produtos da API automaticamente
+  const { data: produtos, isLoading } = useGetProdutosQuery()
+  
+  // 2. Pega os favoritos do estado global
+  const favoritos = useSelector((state: RootState) => state.carrinho.favoritos)
+  
+  const dispatch = useDispatch()
 
-const ProdutosComponent = ({
-  produtos,
-  favoritos,
-  adicionarAoCarrinho,
-  favoritar
-}: Props) => {
-  const produtoEstaNosFavoritos = (produto: ProdutoType) => {
-    const produtoId = produto.id
-    const IdsDosFavoritos = favoritos.map((f) => f.id)
-
-    return IdsDosFavoritos.includes(produtoId)
-  }
+  if (isLoading) return <h2>Carregando...</h2>
 
   return (
-    <>
-      <S.Produtos>
-        {produtos.map((produto) => (
-          <Produto
-            estaNosFavoritos={produtoEstaNosFavoritos(produto)}
-            key={produto.id}
-            produto={produto}
-            favoritar={favoritar}
-            aoComprar={adicionarAoCarrinho}
-          />
-        ))}
-      </S.Produtos>
-    </>
+    <S.Produtos>
+      {produtos?.map((produto) => (
+        <ProdutoComponente
+          key={produto.id}
+          produto={produto}
+          estaNosFavoritos={favoritos.some((f) => f.id === produto.id)}
+          // 3. Dispara as ações para o Reducer
+          adicionarAoCarrinho={() => dispatch(adicionar(produto))}
+          favoritar={() => dispatch(favoritar(produto))}
+        />
+      ))}
+    </S.Produtos>
   )
 }
 
-export default ProdutosComponent
+export default Produtos
