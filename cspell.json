@@ -1,0 +1,16 @@
+{
+    "version": "0.2",
+    "language": "pt-BR,en",
+    "words": [
+      "produtos",
+      "favoritos",
+      "carrinho",
+      "vitrine",
+      "busca"
+    ],
+    "ignorePaths": [
+      "node_modules",
+      "dist",
+      "build"
+    ]
+  }

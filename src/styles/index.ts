@@ -1,5 +1,12 @@
 import { createGlobalStyle } from 'styled-components'
+import styled from 'styled-components'
 
+export const Produtos = styled.ul`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 24px;
+  list-style: none;
+`
 export const cores = {
   corTexto: '#121714',
   corFundo: '#eee',

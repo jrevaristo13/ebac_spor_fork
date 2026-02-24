@@ -1,43 +1,32 @@
-import { Produto as ProdutoType } from '../../App'
-import * as S from './styles'
+import React from 'react'
+import { Produto } from '../../models/Produto'
 
-type Props = {
-  produto: ProdutoType
-  aoComprar: (produto: ProdutoType) => void
-  favoritar: (produto: ProdutoType) => void
+interface Props {
+  produto: Produto
   estaNosFavoritos: boolean
+  adicionar: () => void
+  favoritar: () => void
 }
 
-export const paraReal = (valor: number) =>
-  new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
-    valor
-  )
-
-const ProdutoComponent = ({
+const ProdutoComponente: React.FC<Props> = ({
   produto,
-  aoComprar,
-  favoritar,
-  estaNosFavoritos
-}: Props) => {
+  estaNosFavoritos,
+  adicionar,
+  favoritar
+}) => {
   return (
-    <S.Produto>
-      <S.Capa>
-        <img src={produto.imagem} alt={produto.nome} />
-      </S.Capa>
-      <S.Titulo>{produto.nome}</S.Titulo>
-      <S.Prices>
-        <strong>{paraReal(produto.preco)}</strong>
-      </S.Prices>
-      <S.BtnComprar onClick={() => favoritar(produto)} type="button">
-        {estaNosFavoritos
-          ? '- Remover dos favoritos'
-          : '+ Adicionar aos favoritos'}
-      </S.BtnComprar>
-      <S.BtnComprar onClick={() => aoComprar(produto)} type="button">
-        Adicionar ao carrinho
-      </S.BtnComprar>
-    </S.Produto>
+    <div>
+      <h3>{produto.nome}</h3>
+      <img src={produto.imagem} alt={produto.nome} />
+      <p>R$ {produto.preco.toFixed(2)}</p>
+      <p>{produto.descricao}</p>
+
+      <button onClick={adicionar}>Adicionar ao Carrinho</button>
+      <button onClick={favoritar}>
+        {estaNosFavoritos ? 'Remover dos Favoritos' : 'Favoritar'}
+      </button>
+    </div>
   )
 }
 
-export default ProdutoComponent
+export default ProdutoComponente
